@@ -6,7 +6,7 @@ Mac first. Windows and Linux come later.
 
 ## Needs
 
-A Mac with Apple silicon. ffmpeg, which does the converting, comes inside the app; see
+A Mac with Apple silicon, on macOS 12 Monterey or later. ffmpeg, which does the converting, comes inside the app; see
 `THIRD-PARTY-NOTICES.md`.
 
 For development: Node, pnpm and Rust (`brew install rustup`, then `rustup default stable`).
