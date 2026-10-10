@@ -1,6 +1,6 @@
 [package]
 name = "mediamorph"
-version = "0.1.0"
+version = "1.0.0"
 description = "Converts a video without losing quality"
 license = "GPL-3.0-or-later"
 authors = ["Faizan Ashiq"]
