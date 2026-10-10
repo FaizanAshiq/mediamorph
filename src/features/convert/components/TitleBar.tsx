@@ -2,6 +2,7 @@ import { showInFolder } from '../platform/tauri';
 import { useConvert } from '../store';
 import { AppearanceSwitch } from './AppearanceSwitch';
 import { Button } from './Button';
+import { UpdateNote } from './UpdateNote';
 
 const BUSY = new Set(['measuring', 'first-pass', 'running', 'verifying']);
 
@@ -15,7 +16,7 @@ export function TitleBar({ onOpen }: { onOpen(): void }) {
 
   return (
     <header data-tauri-drag-region className="flex h-[52px] shrink-0 items-center gap-2.5 bg-chrome pl-[88px] pr-4">
-      <span data-tauri-drag-region className="flex-1 self-stretch" />
+      <UpdateNote />
       <AppearanceSwitch />
       {file && status && !BUSY.has(status) && <Button onClick={onOpen}>Open another</Button>}
       {status === 'ready' && (

@@ -11,6 +11,13 @@ A Mac with Apple silicon. ffmpeg, which does the converting, comes inside the ap
 
 For development: Node, pnpm and Rust (`brew install rustup`, then `rustup default stable`).
 
+## Updates
+
+Mediamorph keeps itself up to date. Once a week it asks GitHub whether a newer version is out;
+nothing about you or your files goes with the question. It downloads the new version, checks it is
+signed exactly as itself, and puts it in place when you quit, so the next start is the new version.
+Keep it in Applications: opened straight from Downloads, it offers to move itself there.
+
 ## Develop
 
 | Command | Does |
