@@ -23,7 +23,7 @@ interface TestPlan {
   convert?: boolean;
   /** Stop this long after starting, to test cleanup. */
   cancelAfterMs?: number;
-  /** Quit the whole app this long after starting, to test the exit cleanup. */
+  /** Quit the whole app this long after converting starts, to test the exit cleanup, or, with convert false, this long after the file opens. */
   exitAfterMs?: number;
   /** Stay open after the report, to look at the result. */
   keepOpen?: boolean;
@@ -88,6 +88,9 @@ export async function runTestPlan(tools: Tools | null, store: StoreApi<ConvertSt
     if (plan.cancelAfterMs) setTimeout(() => void app.stop(), plan.cancelAfterMs);
     if (plan.exitAfterMs) setTimeout(() => void invoke('e2e_exit'), plan.exitAfterMs);
     await converting;
+  } else if (plan.exitAfterMs) {
+    // Open and idle, as when an update waits for the app to quit.
+    setTimeout(() => void invoke('e2e_exit'), plan.exitAfterMs);
   }
 
   const state = store.getState();

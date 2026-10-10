@@ -103,6 +103,11 @@ export async function pickVideo(): Promise<string[]> {
 }
 
 /** Opens the folder holding a file, with the file selected: Finder on a Mac. */
+let note: Promise<string | null> | null = null;
+
+/** The version this start was updated to, asked once: the app forgets it on the first answer. */
+export const updateNote = (): Promise<string | null> => (note ??= invoke<string | null>('update_note').catch(() => null));
+
 export function showInFolder(path: string): Promise<void> {
   return revealItemInDir(path);
 }

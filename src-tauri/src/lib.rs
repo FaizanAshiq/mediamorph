@@ -5,6 +5,8 @@ use tauri::{Manager, RunEvent};
 
 #[cfg(debug_assertions)]
 mod e2e;
+mod update;
+mod updater;
 
 /// The half-written output of the conversion in progress, if any.
 #[derive(Default)]
@@ -60,12 +62,18 @@ pub fn run() {
         .plugin(tauri_plugin_opener::init())
         .manage(ActiveTemp::default())
         .manage(KeepAwake::default())
+        .manage(updater::Updates::default())
         .setup(|app| {
             #[cfg(target_os = "macos")]
             app.set_menu(mac_menu(app.handle())?)?;
+            updater::start(app.handle());
             Ok(())
         })
         .on_menu_event(|app, event| {
+            if event.id() == "download-update" {
+                updater::open_download(app);
+                return;
+            }
             if event.id() != "quit" {
                 return;
             }
@@ -84,12 +92,13 @@ pub fn run() {
         set_active_temp,
         move_to_trash,
         keep_awake,
+        updater::update_note,
         e2e::e2e_config,
         e2e::e2e_report,
         e2e::e2e_exit
     ]);
     #[cfg(not(debug_assertions))]
-    let builder = builder.invoke_handler(tauri::generate_handler![set_active_temp, move_to_trash, keep_awake]);
+    let builder = builder.invoke_handler(tauri::generate_handler![set_active_temp, move_to_trash, keep_awake, updater::update_note]);
 
     builder
         .build(tauri::generate_context!())
@@ -101,18 +110,24 @@ pub fn run() {
                 if let Some(path) = app.state::<ActiveTemp>().0.lock().unwrap().take() {
                     let _ = std::fs::remove_file(path);
                 }
+                updater::install_on_exit(app);
             }
         });
 }
 
+/// The menu bar, with the newer version to download first in the app menu when this copy does not
+/// install it itself.
 #[cfg(target_os = "macos")]
-fn mac_menu(app: &tauri::AppHandle) -> tauri::Result<tauri::menu::Menu<tauri::Wry>> {
+pub(crate) fn mac_menu(app: &tauri::AppHandle) -> tauri::Result<tauri::menu::Menu<tauri::Wry>> {
     use tauri::menu::{MenuBuilder, MenuItem, SubmenuBuilder};
 
     let quit = MenuItem::with_id(app, "quit", "Quit Mediamorph", true, Some("CmdOrCtrl+Q"))?;
-    let app_menu = SubmenuBuilder::new(app, "Mediamorph")
-        .about(None)
-        .separator()
+    let mut app_menu = SubmenuBuilder::new(app, "Mediamorph").about(None).separator();
+    if let Some(version) = updater::available(app) {
+        let download = MenuItem::with_id(app, "download-update", format!("Download Mediamorph {version}..."), true, None::<&str>)?;
+        app_menu = app_menu.item(&download).separator();
+    }
+    let app_menu = app_menu
         .hide()
         .hide_others()
         .show_all()

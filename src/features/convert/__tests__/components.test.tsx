@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event';
 import { describe, expect, it, vi } from 'vitest';
 import { ConvertPage } from '@/pages/ConvertPage';
 import { SetupScreen } from '../components/SetupScreen';
+import { UpdateNote } from '../components/UpdateNote';
 import { ConvertContext, createConvertStore, type ConvertOptions } from '../store';
 import { fakeEngine } from './support/fakes';
 import { blueHarbourInfo, nightTrainInfo, makeInfo } from './support/fixtures';
@@ -303,5 +304,22 @@ describe('SetupScreen', () => {
     expect(screen.queryByText(/brew install/)).toBeNull();
     await userEvent.click(screen.getByRole('button', { name: 'Check again' }));
     expect(onCheckAgain).toHaveBeenCalledOnce();
+  });
+});
+
+describe('UpdateNote', () => {
+  it('says what Mediamorph was updated to, then goes', async () => {
+    vi.useFakeTimers({ shouldAdvanceTime: true });
+    render(<UpdateNote read={async () => '1.0.1'} seconds={6} />);
+    expect(await screen.findByText('Updated to Mediamorph 1.0.1')).toBeInTheDocument();
+    await act(async () => void vi.advanceTimersByTime(6000));
+    expect(screen.queryByText(/Updated to/)).toBeNull();
+    vi.useRealTimers();
+  });
+
+  it('says nothing after a start that was not an update', async () => {
+    render(<UpdateNote read={async () => null} />);
+    await act(async () => {});
+    expect(screen.queryByText(/Updated to/)).toBeNull();
   });
 });
