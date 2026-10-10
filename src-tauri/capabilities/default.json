@@ -19,6 +19,16 @@
       "identifier": "shell:allow-execute",
       "allow": [
         {
+          "name": "binaries/ffmpeg",
+          "args": true,
+          "sidecar": true
+        },
+        {
+          "name": "binaries/ffprobe",
+          "args": true,
+          "sidecar": true
+        },
+        {
           "name": "ffmpeg-full",
           "cmd": "/opt/homebrew/opt/ffmpeg-full/bin/ffmpeg",
           "args": true,
@@ -82,6 +92,16 @@
     {
       "identifier": "shell:allow-spawn",
       "allow": [
+        {
+          "name": "binaries/ffmpeg",
+          "args": true,
+          "sidecar": true
+        },
+        {
+          "name": "binaries/ffprobe",
+          "args": true,
+          "sidecar": true
+        },
         {
           "name": "ffmpeg-full",
           "cmd": "/opt/homebrew/opt/ffmpeg-full/bin/ffmpeg",

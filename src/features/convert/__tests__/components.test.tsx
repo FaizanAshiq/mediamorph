@@ -296,10 +296,11 @@ describe('the title bar', () => {
 });
 
 describe('SetupScreen', () => {
-  it('shows the install command and checks again', async () => {
+  it('says to download Mediamorph again, and checks again', async () => {
     const onCheckAgain = vi.fn();
     render(<SetupScreen onCheckAgain={onCheckAgain} />);
-    expect(screen.getByText('brew install ffmpeg')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Mediamorph could not start ffmpeg' })).toBeInTheDocument();
+    expect(screen.queryByText(/brew install/)).toBeNull();
     await userEvent.click(screen.getByRole('button', { name: 'Check again' }));
     expect(onCheckAgain).toHaveBeenCalledOnce();
   });

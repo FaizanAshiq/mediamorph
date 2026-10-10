@@ -2,8 +2,13 @@ import { describe, expect, it } from 'vitest';
 import { findTools, parseMachine, parseVersion } from '../engine/machine';
 
 describe('findTools', () => {
-  it('prefers ffmpeg-full, which can draw subtitles', async () => {
+  it('prefers the copy inside the app', async () => {
     const tools = await findTools(async () => 'ffmpeg version 9.0.2 Copyright');
+    expect(tools).toEqual({ ffmpeg: 'binaries/ffmpeg', ffprobe: 'binaries/ffprobe', version: '9.0.2' });
+  });
+
+  it('then ffmpeg-full, which can draw subtitles', async () => {
+    const tools = await findTools(async (name) => (name.startsWith('binaries/') ? null : 'ffmpeg version 9.0.2 Copyright'));
     expect(tools).toEqual({ ffmpeg: 'ffmpeg-full', ffprobe: 'ffprobe-full', version: '9.0.2' });
   });
 

@@ -5,7 +5,7 @@ import { join } from 'node:path';
 import { createInterface } from 'node:readline';
 import type { Child, FileOps, LineHandlers, Program, RunOutput, Spawner } from '../../engine/ports';
 
-/** Runs ffmpeg and ffprobe from PATH, or from `folder` when given (such as ffmpeg-full's bin folder). */
+/** Runs ffmpeg and ffprobe from PATH, or from `folder` when given. */
 export function makeNodeSpawner(folder = ''): Spawner {
   const bin = (program: Program) => (folder ? join(folder, program) : program);
   return {
@@ -36,7 +36,6 @@ export function makeNodeSpawner(folder = ''): Spawner {
 }
 
 export const nodeSpawner = makeNodeSpawner();
-export const fullSpawner = makeNodeSpawner('/opt/homebrew/opt/ffmpeg-full/bin');
 
 let cache: Promise<string> | null = null;
 
