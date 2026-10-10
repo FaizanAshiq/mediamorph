@@ -11,7 +11,7 @@ import { probe } from '../engine/probe';
 import { runConversion, type RunResult } from '../engine/runner';
 import type { Spawner } from '../engine/ports';
 import { DEFAULT_SETTINGS, type Settings } from '../engine/types';
-import { fullSpawner, nodeFiles, nodeSpawner } from './support/node';
+import { nodeFiles, nodeSpawner } from './support/node';
 
 let dir = '';
 type Done = Extract<RunResult, { status: 'done' }>;
@@ -84,9 +84,9 @@ describe('steps 2 to 5 with real ffmpeg', () => {
     expect(await readFile(result.extras[0], 'utf8')).toContain('Hello there');
   });
 
-  it('burns a text subtitle in with ffmpeg-full, whatever the file is called', async () => {
+  it('burns a text subtitle in, whatever the file is called', async () => {
     const source = await movie("Tom's: [cut], 1.mkv");
-    const result = await done(source, settings((s) => void (s.subtitles.burn = 3)), fullSpawner);
+    const result = await done(source, settings((s) => void (s.subtitles.burn = 3)));
     expect(result.output.subtitles).toEqual([]);
     expect(result.output.video?.codec).toBe('h264');
   }, 120000);

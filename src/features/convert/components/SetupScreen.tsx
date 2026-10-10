@@ -2,9 +2,11 @@ export function SetupScreen({ onCheckAgain }: { onCheckAgain(): void }) {
   return (
     <main className="grid h-full place-items-center p-8">
       <div className="grid max-w-md gap-4">
-        <h1 className="text-[22px] font-semibold leading-tight tracking-tight">Mediamorph needs ffmpeg</h1>
-        <p className="text-muted">ffmpeg does the actual converting. Install it with Homebrew in Terminal, then check again.</p>
-        <code className="select-all rounded bg-well px-3 py-2 font-mono">brew install ffmpeg</code>
+        <h1 className="text-[22px] font-semibold leading-tight tracking-tight">Mediamorph could not start ffmpeg</h1>
+        <p className="text-muted">
+          ffmpeg does the converting and comes inside Mediamorph. Download Mediamorph again and put it in place of this
+          copy, then check again.
+        </p>
         <button
           type="button"
           onClick={onCheckAgain}

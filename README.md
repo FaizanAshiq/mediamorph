@@ -6,17 +6,19 @@ Mac first. Windows and Linux come later.
 
 ## Needs
 
-- macOS
-- ffmpeg: `brew install ffmpeg-full` (plain `brew install ffmpeg` works too, but cannot burn in text subtitles)
-- For development: Node, pnpm and Rust (`brew install rustup`, then `rustup default stable`)
+A Mac with Apple silicon. ffmpeg, which does the converting, comes inside the app; see
+`THIRD-PARTY-NOTICES.md`.
+
+For development: Node, pnpm and Rust (`brew install rustup`, then `rustup default stable`).
 
 ## Develop
 
 | Command | Does |
 | --- | --- |
+| `./scripts/fetch-ffmpeg.sh` | Downloads the ffmpeg and ffprobe the app ships, checked against their pinned SHA-256. Needed before anything else |
 | `pnpm install` | Installs the packages |
 | `pnpm tauri dev` | Runs the app with live reload |
-| `pnpm test` | Runs every test, including real ffmpeg conversions |
+| `pnpm test` | Runs every test, including real conversions with the ffmpeg the app ships |
 | `pnpm typecheck` | Type checks the app and the tests |
 | `pnpm tauri build --bundles app` | Builds `src-tauri/target/release/bundle/macos/Mediamorph.app` |
 

@@ -1,10 +1,13 @@
 import type { Spawner } from './ports';
 import type { Machine } from './types';
 
-/** Tauri shell command names, in the order to try them. Each maps to a path in capabilities/default.json. */
-/** ffmpeg-full comes first: it has libass, which burning text subtitles needs. */
-export const FFMPEG_CANDIDATES = ['ffmpeg-full', 'ffmpeg-path', 'ffmpeg-homebrew', 'ffmpeg-usr-local'];
-export const FFPROBE_CANDIDATES = ['ffprobe-full', 'ffprobe-path', 'ffprobe-homebrew', 'ffprobe-usr-local'];
+/**
+ * Tauri shell command names, in the order to try them. Each maps to a path in capabilities/default.json.
+ * The copy inside the app comes first; Homebrew's are fallbacks for development, ffmpeg-full first
+ * among them since it has libass, which burning text subtitles needs.
+ */
+export const FFMPEG_CANDIDATES = ['binaries/ffmpeg', 'ffmpeg-full', 'ffmpeg-path', 'ffmpeg-homebrew', 'ffmpeg-usr-local'];
+export const FFPROBE_CANDIDATES = ['binaries/ffprobe', 'ffprobe-full', 'ffprobe-path', 'ffprobe-homebrew', 'ffprobe-usr-local'];
 
 export interface Tools {
   ffmpeg: string;

@@ -23,5 +23,7 @@ export default defineConfig(() => ({
     environment: 'jsdom',
     setupFiles: ['./src/test-setup.ts'],
     testTimeout: 60000,
+    // The ffmpeg and ffprobe the app ships, from scripts/fetch-ffmpeg.sh, come first on PATH.
+    env: { PATH: `${fileURLToPath(new URL('./src-tauri/binaries/bin', import.meta.url))}:${process.env.PATH}` },
   },
 }));

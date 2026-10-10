@@ -13,9 +13,12 @@ import { quitMessage } from '../status';
 
 export const VIDEO_EXTENSIONS = ['mkv', 'mp4', 'm4v', 'avi', 'mov', 'webm', 'ts', 'm2ts', 'mts', 'wmv', 'flv', 'mpg', 'mpeg', 'ogv', '3gp', 'vob', 'asf'];
 
+/** The copies inside the app run as sidecars; the rest by their name in the capabilities. */
+const command = (name: string, args: string[]) => (name.startsWith('binaries/') ? Command.sidecar(name, args) : Command.create(name, args));
+
 export const checkTool: ToolCheck = async (name) => {
   try {
-    const out = await Command.create(name, ['-version']).execute();
+    const out = await command(name, ['-version']).execute();
     if (out.code !== 0) return null;
     return out.stdout.split('\n')[0] || null;
   } catch {
@@ -27,20 +30,20 @@ export function createTauriSpawner(tools: Tools): Spawner {
   const nameFor = (program: Program) => (program === 'ffmpeg' ? tools.ffmpeg : tools.ffprobe);
   return {
     async run(program, args) {
-      const out = await Command.create(nameFor(program), args).execute();
+      const out = await command(nameFor(program), args).execute();
       return { code: out.code, stdout: out.stdout, stderr: out.stderr };
     },
     async spawn(program, args, on) {
-      const command = Command.create(nameFor(program), args);
-      command.stdout.on('data', on.stdout);
-      command.stderr.on('data', on.stderr);
+      const running = command(nameFor(program), args);
+      running.stdout.on('data', on.stdout);
+      running.stderr.on('data', on.stderr);
       // The plugin raises `error` for an output line it cannot decode while the process keeps
       // running, so it goes to the log; only `close` means the process has ended.
-      command.on('error', (message) => on.stderr(String(message)));
+      running.on('error', (message) => on.stderr(String(message)));
       const done = new Promise<{ code: number | null }>((resolve) => {
-        command.on('close', (data) => resolve({ code: data.code }));
+        running.on('close', (data) => resolve({ code: data.code }));
       });
-      const child = await command.spawn();
+      const child = await running.spawn();
       return { done, kill: () => child.kill() };
     },
   };
