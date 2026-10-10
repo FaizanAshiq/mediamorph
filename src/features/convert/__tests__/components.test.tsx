@@ -257,8 +257,11 @@ describe('converting and done', () => {
     expect(screen.getByRole('button', { name: 'Show in Finder' })).toBeInTheDocument();
     expect(screen.getByText('Also saved: Night Train.eng.srt')).toBeInTheDocument();
     expect(screen.getByText('The original could not be moved to the Trash.')).toBeInTheDocument();
+    // Done, the plan is what happened; ready again, it is what will.
+    expect(screen.getByRole('region', { name: 'What happened' })).toBeInTheDocument();
     await userEvent.click(screen.getByRole('button', { name: 'Convert again with other settings' }));
     expect(store.getState().file?.status).toBe('ready');
+    expect(happens()).toBeInTheDocument();
   });
 
   it('explains a failure in plain words and keeps the raw message behind Show details', async () => {
