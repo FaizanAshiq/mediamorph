@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/*
+ * Light by default; dark from the system unless the person picked Light, or always when they picked Dark.
+ * Muted text is 5.8:1 or more on every ground it sits on in both themes; faint only ever fills a bar, never text.
+ * One orange per theme, for fills, the slider and checkboxes alike: light #ec7432 (dark text on it 6.4:1, the white
+ * tick and its edge on a white card 3:1), dark #f4843f.
+ */
+:root {
+  --paper: #f1f0ed;
+  --chrome: #e5e3de;
+  --surface: #ffffff;
+  --well: #ebe9e4;
+  --sunk: #e2dfd9;
+  --raised: #ffffff;
+  --track: #d4d1ca;
+  --ink: #121211;
+  --muted: #4b4944;
+  --faint: #6b6963;
+  --accent: #ec7432;
+  --on-accent: #111111;
+  --check: #ec7432;
+  --good: #13703d;
+  --warn: #8a5a10;
+  --bad: #a82219;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme='light']) {
+    --paper: #121214;
+    --chrome: #1a1b1e;
+    --surface: #202125;
+    --well: #2c2d32;
+    --sunk: #19191c;
+    --raised: #47494f;
+    --track: #3a3c42;
+    --ink: #f5f5f3;
+    --muted: #bdbdb8;
+    --faint: #9d9d98;
+    --accent: #f4843f;
+    --check: #f4843f;
+    --good: #4ad08a;
+    --warn: #eab35c;
+    --bad: #f58c83;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme='dark'] {
+  --paper: #121214;
+  --chrome: #1a1b1e;
+  --surface: #202125;
+  --well: #2c2d32;
+  --sunk: #19191c;
+  --raised: #47494f;
+  --track: #3a3c42;
+  --ink: #f5f5f3;
+  --muted: #bdbdb8;
+  --faint: #9d9d98;
+  --accent: #f4843f;
+  --check: #f4843f;
+  --good: #4ad08a;
+  --warn: #eab35c;
+  --bad: #f58c83;
+  color-scheme: dark;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 13px;
+  -webkit-font-smoothing: antialiased;
+}

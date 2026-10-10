@@ -1,0 +1,29 @@
+# Mediamorph
+
+Converts a video to MP4, MKV, MOV, WebM, M4A or MP3 without losing quality, one file at a time. Tracks the new format can hold are copied as they are, which takes seconds; only what has to change is re-encoded. Pick which audio and subtitle tracks to keep, burn subtitles in, save them as `.srt`, trade quality for size on a slider that shows the size as you move it, spend time instead of quality with Speed (Smallest file is about 20 percent smaller at the same look), set a target size or a loudness standard, and see a before and after frame before you start. Size and frame rate only ever go down, every result is checked before it gets its real name, and nothing is ever overwritten.
+
+Mac first. Windows and Linux come later.
+
+## Needs
+
+- macOS
+- ffmpeg: `brew install ffmpeg-full` (plain `brew install ffmpeg` works too, but cannot burn in text subtitles)
+- For development: Node, pnpm and Rust (`brew install rustup`, then `rustup default stable`)
+
+## Develop
+
+| Command | Does |
+| --- | --- |
+| `pnpm install` | Installs the packages |
+| `pnpm tauri dev` | Runs the app with live reload |
+| `pnpm test` | Runs every test, including real ffmpeg conversions |
+| `pnpm typecheck` | Type checks the app and the tests |
+| `pnpm tauri build --bundles app` | Builds `src-tauri/target/release/bundle/macos/Mediamorph.app` |
+
+Debug builds can drive themselves for end-to-end tests: launched with `MEDIAMORPH_E2E` set to a
+test plan, they convert the file by themselves, write a report to `MEDIAMORPH_E2E_REPORT`, then
+quit. The plan's shape is in `src/e2e.ts`. Release builds do not contain this.
+
+## License
+
+GPL-3.0-or-later. See `LICENSE`.
