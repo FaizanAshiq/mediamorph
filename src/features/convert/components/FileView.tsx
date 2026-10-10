@@ -107,7 +107,7 @@ export function FileView() {
         {file.plan && (
           <section aria-labelledby="what-happens" className="grid gap-2.5 rounded bg-surface p-5">
             <h2 id="what-happens" className="font-semibold">
-              What will happen
+              {file.status === 'done' ? 'What happened' : 'What will happen'}
             </h2>
             <ul className="m-0 grid list-none gap-1.5 p-0">
               {file.plan.summary.map((line) => (
